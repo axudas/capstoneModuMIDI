@@ -31,7 +31,7 @@ capstone/
 |---|---|
 | Parts library (LibrePCB) | ✅ Done — 8 devices, needs a 1:1 paper-print fit check |
 | Schematic | 🟡 In progress — 33 hall sensors + barrel jack placed |
-| PCB layout | ⬜ Not started |
+| PCB layout | 🟡 Started — 175 × 125 mm board outline set |
 | Switch test rig (CAD) | ✅ Designed — ready to print, servo dims need measuring |
 | Firmware | ⬜ Not started |
 | Enclosure / keys | ⬜ Not started (old ModuMIDI parts available for reference) |
@@ -105,5 +105,6 @@ The copies in this repo are a snapshot of the LibrePCB workspace from 2026-11-03
 
 | Date | Change |
 |---|---|
+| 2026-11-03 | Portfolio page: [aidancarr.tech/modumidi.html](https://aidancarr.tech/modumidi.html) |
 | 2026-11-03 | Organized repo: added LibrePCB project + libraries, switch test rig, design notes and this README |
 | 2026-10-22 | Imported the original ModuMIDI project as reference material |
