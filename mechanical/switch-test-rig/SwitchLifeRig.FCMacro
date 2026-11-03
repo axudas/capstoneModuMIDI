@@ -1,0 +1,504 @@
+# -*- coding: utf-8 -*-
+"""
+Switch Lifetime Test Rig  -  parametric FreeCAD macro (FreeCAD 0.21 / 1.x)
+
+Run it from Macro > Macros... > Execute, or headless:
+    freecadcmd SwitchLifeRig.FCMacro
+It builds a new document "SwitchLifeRig" with every part in its assembled
+position. Change a number in the PARAMETERS block and run it again to rebuild.
+
+Layout (world axes):  X = left/right, Y = back(+)/front(-), Z = up.
+Base top surface is Z = 0. The plunger sits over the crosshair at (50, 40).
+
+Drive train:  TowerPro SG51R  ->  20T pinion  ->  40T gear  (2:1, 2x torque)
+              40T gear and cam are one part on two 623ZZ bearings.
+              Cam pushes a 623ZZ roller on a guided plunger, which presses the
+              switch straight down (no side load on the switch stem).
+"""
+
+import math
+import FreeCAD as App
+import Part
+
+V = App.Vector
+
+# =========================== PARAMETERS (mm) ===============================
+# --- placement of the sliding arm (sets the press height) -------------------
+SADDLE_Z     = 60.0    # bottom edge of the saddle on the column scale
+                       # plunger tip at rest = SADDLE_Z - 40
+
+# --- mini breadboards (SYB-170) ------------------------------------------
+BB_L, BB_W, BB_H = 47.0, 35.0, 8.5
+BB_CLR       = 0.4     # pocket clearance (total)
+BB_POCKET    = 2.0     # pocket depth
+
+# --- base ------------------------------------------------------------------
+BASE_X, BASE_Y, BASE_T = 170.0, 115.0, 6.0
+DUT_X, DUT_Y = 50.0, 40.0          # plunger axis / test position
+
+# --- column ---------------------------------------------------------------
+COL_W, COL_D, COL_H = 24.0, 16.0, 125.0   # X width, Y depth, height
+COL_BACK_Y   = 110.0
+SLOT_W       = 3.4                        # M3 clearance
+M3_CLR       = 3.4
+M3_NUT_AF    = 5.7                        # nut across-flats + clearance
+M3_NUT_T     = 2.6
+
+# --- saddle / arm ---------------------------------------------------------
+SAD_CLR, SAD_WALL, SAD_FRONT, SAD_H = 0.3, 4.0, 5.0, 32.0
+
+# --- servo: TowerPro SG51R  (MEASURE YOURS and adjust) --------------------
+SV_CASE_L    = 21.6    # case length (along the tabs)
+SV_CASE_W    = 11.7    # case width
+SV_TAB_Z     = 14.5    # case bottom -> underside of mounting tabs
+SV_SHAFT_TOP = 23.5    # case bottom -> top of output spline
+SV_SHAFT_OFF = 5.8     # shaft centre -> nearest case end
+SV_HOLE_PITCH= 27.0    # tab screw hole spacing
+SV_HOLE_D    = 2.0     # pilot for the self-tapping tab screws
+SV_CLR       = 0.4
+
+# --- gears (module 1, 20 deg) ---------------------------------------------
+MOD          = 1.0
+Z_PINION     = 20
+Z_GEAR       = 40
+BACKLASH     = 0.15
+GEAR_FACE    = 7.0     # 40T face width
+PINION_FACE  = 6.0
+GEAR_GAP     = 9.0     # plate front face -> back of 40T gear
+
+# horn pocket in the pinion (trim the single-arm horn to HORN_ARM_R)
+HORN_HUB_D   = 7.4
+HORN_TIP_D   = 4.4
+HORN_ARM_R   = 6.0     # centre of the arm tip circle
+HORN_DEPTH   = 2.0
+
+# --- bearings 623ZZ (3 x 10 x 4) ------------------------------------------
+BRG_OD, BRG_ID, BRG_W = 10.0, 3.0, 4.0
+BRG_FIT      = 0.1     # added to OD for the press pocket
+
+# --- cam -------------------------------------------------------------------
+CAM_T        = 3.5     # cam thickness (thinner than roller, so the fork clears it)
+CAM_HUB      = 5.0     # spacer hub between gear and cam
+CAM_R0       = 10.0    # base circle radius of the cam surface
+CAM_LIFT     = 4.5     # press stroke (MX full travel is ~4.0)
+CAM_RISE     = 60.0    # cam degrees for the rise  (servo deg = 2x)
+CAM_DWELL    = 20.0    # dwell at full lift
+CAM_REST     = -5.0    # cam angle under the roller at rest
+
+# --- plunger ---------------------------------------------------------------
+PL_SHAFT_X, PL_SHAFT_Y = 10.0, 6.0
+PL_GUIDE_CLR = 0.4
+PL_STOP_GAP  = 6.0     # hard stop: max plunger travel (must be > CAM_LIFT)
+PL_EXT       = 10.0    # shaft below the guide at rest
+SHELF_T      = 10.0
+
+# --- clamp bars ------------------------------------------------------------
+CLAMP_L, CLAMP_W, CLAMP_T = 100.0, 10.0, 5.0
+BED_SLOT_X   = (10.0, 90.0)
+# ==========================================================================
+
+# ------------------------------- derived ---------------------------------
+COL_X0 = DUT_X - COL_W / 2
+COL_X1 = DUT_X + COL_W / 2
+COL_Y0 = COL_BACK_Y - COL_D
+SB = SADDLE_Z
+ST = SB + SAD_H
+ZC = ST - 22.0                       # cam / servo shaft axis height
+SAD_FRONT_Y = COL_Y0 - SAD_CLR - SAD_FRONT
+RR = BRG_OD / 2                      # roller radius
+RB = CAM_R0 + RR                     # pitch base radius
+CD = MOD * (Z_PINION + Z_GEAR) / 2   # centre distance
+PIN_X = DUT_X + CD
+CAM_FRONT = GEAR_GAP + GEAR_FACE + CAM_HUB          # plate -> cam back face
+YP_ = None
+# plunger axis lies in the cam mid plane
+PL_OFF = CAM_FRONT + CAM_T / 2
+YP = DUT_Y + PL_OFF                  # plate front face Y
+PLATE_T = 4.0
+ZR = ZC - RB                         # roller axle height at rest
+SHELF_TOP = ZR - 9.0 - PL_STOP_GAP
+PLATE_Z0 = SHELF_TOP - SHELF_T
+PLATE_Z1 = ST
+# servo case in world X (shaft at PIN_X, body extending toward the cam)
+SV_X1 = PIN_X + SV_SHAFT_OFF
+SV_X0 = SV_X1 - SV_CASE_L
+SV_XC = (SV_X0 + SV_X1) / 2
+
+
+# ------------------------------- helpers ---------------------------------
+def box(x0, x1, y0, y1, z0, z1):
+    return Part.makeBox(x1 - x0, y1 - y0, z1 - z0, V(x0, y0, z0))
+
+
+def cyl_y(x, z, r, y0, y1):
+    """cylinder along Y from y0 to y1"""
+    lo, hi = min(y0, y1), max(y0, y1)
+    return Part.makeCylinder(r, hi - lo, V(x, lo, z), V(0, 1, 0))
+
+
+def slot_y(x0, x1, z, r, y0, y1):
+    """stadium slot along X (from x0 to x1), cut along Y"""
+    s = cyl_y(x0, z, r, y0, y1).fuse(cyl_y(x1, z, r, y0, y1))
+    lo, hi = min(y0, y1), max(y0, y1)
+    return s.fuse(box(x0, x1, lo, hi, z - r, z + r))
+
+
+def xz_prism(pts2d, y_back, t, closed_spline=False):
+    """2-D profile given as (x, z) points, extruded from y_back toward -Y by t"""
+    if closed_spline:
+        bs = Part.BSplineCurve()
+        bs.interpolate([V(p[0], p[1], 0) for p in pts2d], PeriodicFlag=True)
+        w = Part.Wire(bs.toShape())
+    else:
+        p = [V(a, b, 0) for a, b in pts2d] + [V(pts2d[0][0], pts2d[0][1], 0)]
+        w = Part.makePolygon(p)
+    f = Part.Face(w)
+    s = f.extrude(V(0, 0, t))
+    s.rotate(V(0, 0, 0), V(1, 0, 0), 90)     # (x,y,z) -> (x,-z,y)
+    s.translate(V(0, y_back, 0))
+    return s
+
+
+def hex_prism_y(x, z, af, y0, y1):
+    r = af / math.sqrt(3)
+    pts = [(x + r * math.cos(math.radians(60 * i)), z + r * math.sin(math.radians(60 * i)))
+           for i in range(6)]
+    return xz_prism(pts, max(y0, y1), abs(y1 - y0))
+
+
+def hex_prism_z(x, y, af, z0, z1):
+    r = af / math.sqrt(3)
+    p = [V(x + r * math.cos(math.radians(60 * i + 30)), y + r * math.sin(math.radians(60 * i + 30)), z0)
+         for i in range(6)]
+    p.append(p[0])
+    return Part.Face(Part.makePolygon(p)).extrude(V(0, 0, z1 - z0))
+
+
+def inv(a):
+    return math.tan(a) - a
+
+
+def gear_points(z, m, backlash=0.1, pa_deg=20.0, n=8):
+    """involute spur gear outline, centred on origin, tooth 0 along +X"""
+    pa = math.radians(pa_deg)
+    rp = m * z / 2
+    rb = rp * math.cos(pa)
+    ra = rp + m
+    rf = rp - 1.25 * m
+    half_p = (math.pi * m / 2 - backlash / 2) / (2 * rp)   # half tooth angle @ pitch
+    def psi(r):
+        a = math.acos(min(1.0, rb / r))
+        return half_p + inv(pa) - inv(a)
+    r_start = max(rb, rf)
+    radii = [r_start + (ra - r_start) * i / n for i in range(n + 1)]
+    pts = []
+    for k in range(z):
+        c = 2 * math.pi * k / z
+        flank_l = []
+        if rf < rb:
+            flank_l.append((rf, c - psi(rb)))
+        for r in radii:
+            flank_l.append((r, c - psi(r)))
+        # tip
+        tip = [(ra, c - psi(ra) + (2 * psi(ra)) * i / 3) for i in range(1, 3)]
+        flank_r = [(r, 2 * c - a) for (r, a) in reversed(flank_l)]
+        # root arc to next tooth
+        a_end = c + psi(r_start if rf >= rb else rb)
+        a_next = 2 * math.pi * (k + 1) / z - psi(r_start if rf >= rb else rb)
+        root = [(rf, a_end + (a_next - a_end) * i / 4) for i in range(1, 4)]
+        for r, a in flank_l + tip + flank_r + root:
+            pts.append((r * math.cos(a), r * math.sin(a)))
+    return pts
+
+
+def cam_lift(th_deg):
+    """symmetric rise / dwell / fall, cosine (harmonic) motion"""
+    t = th_deg % 360.0
+    if t > 180:
+        t -= 360
+    b, d = CAM_RISE, CAM_DWELL
+    if 0 <= t <= b:
+        return CAM_LIFT / 2 * (1 - math.cos(math.pi * t / b))
+    if b < t <= b + d:
+        return CAM_LIFT
+    if b + d < t <= 2 * b + d:
+        u = t - (b + d)
+        return CAM_LIFT / 2 * (1 + math.cos(math.pi * u / b))
+    return 0.0
+
+
+def cam_points(N=360):
+    """cam surface for a roller follower: inner offset of the pitch curve"""
+    P = []
+    for i in range(N):
+        th = 360.0 * i / N
+        R = RB + cam_lift(th)
+        a = math.radians(th)
+        P.append((R * math.cos(a), R * math.sin(a)))
+    out = []
+    for i in range(N):
+        x0, y0 = P[i - 1]
+        x2, y2 = P[(i + 1) % N]
+        tx, ty = x2 - x0, y2 - y0
+        L = math.hypot(tx, ty)
+        nx, ny = ty / L, -tx / L          # outward normal (CCW curve)
+        x, y = P[i]
+        out.append((x - RR * nx, y - RR * ny))
+    return out
+
+
+def rot2(pts, deg, cx=0.0, cz=0.0):
+    a = math.radians(deg)
+    c, s = math.cos(a), math.sin(a)
+    return [(cx + x * c - y * s, cz + x * s + y * c) for x, y in pts]
+
+
+# =============================== PARTS =====================================
+def make_base():
+    b = box(0, BASE_X, 0, BASE_Y, -BASE_T, 0)
+    # column
+    col = box(COL_X0, COL_X1, COL_Y0, COL_BACK_Y, 0, COL_H)
+    b = b.fuse(col)
+    # side gussets
+    for sx in (-1, 1):
+        x_in = COL_X0 if sx < 0 else COL_X1
+        x_out = x_in + sx * 12
+        pts = [(x_in, 0), (x_out, 0), (x_in, 12)]
+        g = xz_prism(pts, COL_Y0 + COL_D / 2 + 2, 4)
+        b = b.fuse(g)
+    # vertical clamp slot through the column (front to back)
+    b = b.cut(box(DUT_X - SLOT_W / 2, DUT_X + SLOT_W / 2, COL_Y0 - 1, COL_BACK_Y + 1, 6, COL_H - 5))
+    # height scale on the +X face: tick every 5 mm, long tick = every 10 mm of tip height
+    for zz in range(10, int(COL_H - 4), 5):
+        long_ = ((zz - 40) % 10 == 0)
+        L = 8 if long_ else 4
+        b = b.cut(box(COL_X1 - 0.6, COL_X1 + 1, COL_Y0, COL_Y0 + L, zz - 0.4, zz + 0.4))
+    # breadboard pockets
+    px0 = BASE_X - 7.6 - (BB_L + BB_CLR)
+    for py0 in (12.0, 57.0):
+        b = b.cut(box(px0, px0 + BB_L + BB_CLR, py0, py0 + BB_W + BB_CLR, -BB_POCKET, 1))
+        # finger notch to lift the board out
+        b = b.cut(Part.makeCylinder(6, BB_POCKET + 1, V(px0 + (BB_L + BB_CLR) / 2, py0, -BB_POCKET)))
+    # DUT bed: two clamp slots (M3) with nut channels underneath
+    for sx in BED_SLOT_X:
+        b = b.cut(box(sx - SLOT_W / 2, sx + SLOT_W / 2, 12, 72, -BASE_T - 1, 1))
+        b = b.cut(Part.makeCylinder(SLOT_W / 2, BASE_T + 2, V(sx, 12, -BASE_T - 1)))
+        b = b.cut(Part.makeCylinder(SLOT_W / 2, BASE_T + 2, V(sx, 72, -BASE_T - 1)))
+        b = b.cut(box(sx - M3_NUT_AF / 2, sx + M3_NUT_AF / 2, 9, 75, -BASE_T - 1, -BASE_T + M3_NUT_T + 0.2))
+    # back stop rail to square the device under test
+    b = b.fuse(box(18, 82, 74, 77, 0, 4))
+    # crosshair under the plunger
+    b = b.cut(box(DUT_X - 8, DUT_X + 8, DUT_Y - 0.3, DUT_Y + 0.3, -0.4, 1))
+    b = b.cut(box(DUT_X - 0.3, DUT_X + 0.3, DUT_Y - 8, DUT_Y + 8, -0.4, 1))
+    # wire pass-through between breadboards and the bed
+    b = b.cut(box(97, 105, 30, 70, -BASE_T - 1, 1))
+    return b.removeSplitter()
+
+
+def make_arm():
+    """saddle that slides on the column + beam out to the servo plate"""
+    ox0, ox1 = COL_X0 - SAD_CLR - SAD_WALL, COL_X1 + SAD_CLR + SAD_WALL
+    s = box(ox0, ox1, SAD_FRONT_Y, COL_BACK_Y - 2, SB, ST)
+    s = s.cut(box(COL_X0 - SAD_CLR, COL_X1 + SAD_CLR, COL_Y0 - SAD_CLR, COL_BACK_Y + 5, SB - 1, ST + 1))
+    # beam
+    beam_y0 = YP + PLATE_T
+    s = s.fuse(box(DUT_X - 10, DUT_X + 10, beam_y0, SAD_FRONT_Y + 0.5, ZC + 10, ST))
+    # gussets under the beam
+    for gx in (DUT_X - 10, DUT_X + 7):
+        pts = [(SAD_FRONT_Y + 0.5, SB + 4), (SAD_FRONT_Y + 0.5, ZC + 10.5), (SAD_FRONT_Y - 14, ZC + 10.5)]
+        # profile in (y, z); build in XZ then rotate about Z
+        f = Part.Face(Part.makePolygon([V(gx, y, z) for y, z in pts] + [V(gx, pts[0][0], pts[0][1])]))
+        s = s.fuse(f.extrude(V(3, 0, 0)))
+    # clamp bolts: 2 x M3 through the front wall, nut pockets on the front face
+    for zz in (SB + 6, SB + 16):
+        s = s.cut(cyl_y(DUT_X, zz, M3_CLR / 2, SAD_FRONT_Y - 1, COL_Y0))
+        s = s.cut(hex_prism_y(DUT_X, zz, M3_NUT_AF, SAD_FRONT_Y - 1, SAD_FRONT_Y + M3_NUT_T))
+    # servo-plate bolts: 2 x M3 along Y with nut slots opening on the beam underside
+    for bx in (DUT_X - 5, DUT_X + 5):
+        zz = ZC + 16
+        s = s.cut(cyl_y(bx, zz, M3_CLR / 2, beam_y0 - 1, beam_y0 + 14))
+        s = s.cut(box(bx - M3_NUT_AF / 2, bx + M3_NUT_AF / 2, beam_y0 + 3.25, beam_y0 + 3.25 + M3_NUT_T,
+                      ZC + 9, zz + M3_NUT_AF / 2 + 0.3))
+    return s.removeSplitter()
+
+
+def make_servo_plate():
+    p = box(24, PIN_X + 16, YP, YP + PLATE_T, PLATE_Z0, PLATE_Z1)
+    # servo window (case drops in from the front, tabs rest on the front face)
+    p = p.cut(box(SV_X0 - SV_CLR, SV_X1 + SV_CLR, YP - 1, YP + PLATE_T + 1,
+                  ZC - SV_CASE_W / 2 - SV_CLR, ZC + SV_CASE_W / 2 + SV_CLR))
+    for hx in (SV_XC - SV_HOLE_PITCH / 2, SV_XC + SV_HOLE_PITCH / 2):
+        p = p.cut(cyl_y(hx, ZC, SV_HOLE_D / 2, YP - 1, YP + PLATE_T + 1))
+    # cam axle: slot along X so you can set gear mesh
+    p = p.cut(slot_y(DUT_X - 1.5, DUT_X + 1.5, ZC, 1.65, YP - 1, YP + PLATE_T + 1))
+    # bolts to the beam
+    for bx in (DUT_X - 5, DUT_X + 5):
+        p = p.cut(cyl_y(bx, ZC + 16, M3_CLR / 2, YP - 1, YP + PLATE_T + 1))
+    # plunger guide shelf
+    sh = box(DUT_X - 11, DUT_X + 11, YP - 32, YP + 0.5, SHELF_TOP - SHELF_T, SHELF_TOP)
+    for gx in (DUT_X - 11, DUT_X + 8):
+        pts = [(YP, SHELF_TOP - 0.5), (YP, SHELF_TOP + 8), (YP - 8, SHELF_TOP - 0.5)]
+        f = Part.Face(Part.makePolygon([V(gx, y, z) for y, z in pts] + [V(gx, pts[0][0], pts[0][1])]))
+        sh = sh.fuse(f.extrude(V(3, 0, 0)))
+    p = p.fuse(sh)
+    hx_, hy_ = (PL_SHAFT_X + PL_GUIDE_CLR) / 2, (PL_SHAFT_Y + PL_GUIDE_CLR) / 2
+    p = p.cut(box(DUT_X - hx_, DUT_X + hx_, DUT_Y - hy_, DUT_Y + hy_, SHELF_TOP - SHELF_T - 1, SHELF_TOP + 1))
+    return p.removeSplitter()
+
+
+def make_pinion():
+    pts = rot2(gear_points(Z_PINION, MOD, BACKLASH), 180.0 / Z_PINION, PIN_X, ZC)
+    yb = YP - (GEAR_GAP + 0.5)
+    g = xz_prism(pts, yb, PINION_FACE)
+    # horn pocket on the back face
+    hub = cyl_y(PIN_X, ZC, HORN_HUB_D / 2, yb + 1, yb - HORN_DEPTH)
+    tipx = PIN_X - HORN_ARM_R
+    tip = cyl_y(tipx, ZC, HORN_TIP_D / 2, yb + 1, yb - HORN_DEPTH)
+    web = xz_prism([(PIN_X, ZC + HORN_HUB_D / 2), (tipx, ZC + HORN_TIP_D / 2),
+                    (tipx, ZC - HORN_TIP_D / 2), (PIN_X, ZC - HORN_HUB_D / 2)], yb + 1, HORN_DEPTH + 1)
+    g = g.cut(hub.fuse(tip).fuse(web))
+    g = g.cut(cyl_y(PIN_X, ZC, 1.15, yb + 1, yb - PINION_FACE - 1))          # horn screw
+    g = g.cut(cyl_y(PIN_X, ZC, 2.25, yb - PINION_FACE - 1, yb - PINION_FACE + 2.5))  # head c-bore
+    return g.removeSplitter()
+
+
+def make_cam_gear():
+    yb = YP - GEAR_GAP
+    g = xz_prism([(DUT_X + x, ZC + z) for x, z in gear_points(Z_GEAR, MOD, BACKLASH)], yb, GEAR_FACE)
+    g = g.fuse(cyl_y(DUT_X, ZC, 8.0, yb - GEAR_FACE + 0.1, yb - CAM_FRONT + GEAR_GAP - 0.1))
+    off = -90.0 - CAM_REST          # put CAM_REST straight down at rest
+    cpts = rot2(cam_points(), off, DUT_X, ZC)
+    cam = xz_prism(cpts, YP - CAM_FRONT + 0.05, CAM_T + 0.05, closed_spline=True)
+    g = g.fuse(cam)
+    yf = YP - CAM_FRONT - CAM_T
+    g = g.cut(cyl_y(DUT_X, ZC, (BRG_OD + BRG_FIT) / 2, yb + 1, yb - BRG_W))
+    g = g.cut(cyl_y(DUT_X, ZC, (BRG_OD + BRG_FIT) / 2, yf - 1, yf + BRG_W))
+    g = g.cut(cyl_y(DUT_X, ZC, 3.0, yb + 1, yf - 1))
+    # rest-position index mark on the cam face
+    g = g.cut(box(DUT_X - 0.4, DUT_X + 0.4, yf - 0.1, yf + 0.5, ZC - CAM_R0 + 0.5, ZC - 6))
+    return g.removeSplitter()
+
+
+def make_plunger(lift=0.0):
+    zr = ZR - lift
+    xh = PL_SHAFT_X / 2
+    yi, yo = BRG_W / 2 + 0.5, BRG_W / 2 + 3.5
+    p = box(DUT_X - xh, DUT_X + xh, DUT_Y - yo, DUT_Y + yo, zr - 9, zr - 6)
+    for sy in (-1, 1):
+        y0, y1 = sorted((DUT_Y + sy * yi, DUT_Y + sy * yo))
+        arm = box(DUT_X - xh, DUT_X + xh, y0, y1, zr - 9, zr)
+        arm = arm.fuse(cyl_y(DUT_X, zr, xh, y0, y1))
+        p = p.fuse(arm)
+    p = p.cut(cyl_y(DUT_X, zr, 1.6, DUT_Y - yo - 1, DUT_Y + yo + 1))
+    L = PL_STOP_GAP + SHELF_T + PL_EXT
+    p = p.fuse(box(DUT_X - xh, DUT_X + xh, DUT_Y - PL_SHAFT_Y / 2, DUT_Y + PL_SHAFT_Y / 2, zr - 9 - L, zr - 8.9))
+    return p.removeSplitter()
+
+
+def make_spacer():
+    yb = YP - M3_NUT_T + 0.2
+    L = GEAR_GAP - (M3_NUT_T - 0.2)
+    s = cyl_y(DUT_X, ZC, 2.5, yb, yb - L).cut(cyl_y(DUT_X, ZC, 1.65, yb + 1, yb - L - 1))
+    return s
+
+
+def make_clamp(y, z=0.0):
+    c = box(DUT_X - CLAMP_L / 2, DUT_X + CLAMP_L / 2, y - CLAMP_W / 2, y + CLAMP_W / 2, z, z + CLAMP_T)
+    for sx in BED_SLOT_X:
+        c = c.cut(box(sx - 4, sx + 4, y - SLOT_W / 2, y + SLOT_W / 2, z - 1, z + CLAMP_T + 1))
+        for ex in (sx - 4, sx + 4):
+            c = c.cut(Part.makeCylinder(SLOT_W / 2, CLAMP_T + 2, V(ex, y, z - 1)))
+    return c.removeSplitter()
+
+
+# ------------------------- reference (not printed) ------------------------
+def ref_servo():
+    yb = YP + SV_TAB_Z            # case bottom (behind the plate)
+    c = box(SV_X0, SV_X1, YP, yb, ZC - SV_CASE_W / 2, ZC + SV_CASE_W / 2)
+    c = c.fuse(box(SV_X0, SV_X1, YP - (SV_SHAFT_TOP - SV_TAB_Z - 3.5), YP, ZC - SV_CASE_W / 2, ZC + SV_CASE_W / 2))
+    tab = box(SV_XC - 16, SV_XC + 16, YP - 2.0, YP, ZC - SV_CASE_W / 2, ZC + SV_CASE_W / 2)
+    for hx in (SV_XC - SV_HOLE_PITCH / 2, SV_XC + SV_HOLE_PITCH / 2):
+        tab = tab.cut(cyl_y(hx, ZC, 1.0, YP - 3, YP + 1))
+    c = c.fuse(tab)
+    c = c.fuse(cyl_y(PIN_X, ZC, 2.4, YP, YP - (SV_SHAFT_TOP - SV_TAB_Z)))
+    return c
+
+
+def ref_bearings():
+    out = []
+    def brg(x, z, yb):
+        return cyl_y(x, z, BRG_OD / 2, yb, yb - BRG_W).cut(cyl_y(x, z, BRG_ID / 2, yb + 1, yb - BRG_W - 1))
+    out.append(brg(DUT_X, ZC, YP - GEAR_GAP))
+    out.append(brg(DUT_X, ZC, YP - CAM_FRONT - CAM_T + BRG_W))
+    out.append(brg(DUT_X, ZR, DUT_Y + BRG_W / 2))
+    return out
+
+
+def ref_breadboards():
+    px0 = BASE_X - 7.6 - (BB_L + BB_CLR) + BB_CLR / 2
+    return [box(px0, px0 + BB_L, py0 + BB_CLR / 2, py0 + BB_CLR / 2 + BB_W, -BB_POCKET, -BB_POCKET + BB_H)
+            for py0 in (12.0, 57.0)]
+
+
+def ref_dut():
+    """stand-in for the device under test: a PCB with one MX-style switch"""
+    pcb_t, top = 1.6, SB - 40.0
+    d = box(DUT_X - 30, DUT_X + 30, DUT_Y - 25, DUT_Y + 25, 0, pcb_t)
+    d = d.fuse(box(DUT_X - 7, DUT_X + 7, DUT_Y - 7, DUT_Y + 7, pcb_t, top - 4))
+    d = d.fuse(box(DUT_X - 2, DUT_X + 2, DUT_Y - 2, DUT_Y + 2, top - 4.1, top))
+    return d
+
+
+def ref_bolts():
+    """M3 axle bolt (head behind the plate) as a simple rod"""
+    return cyl_y(DUT_X, ZC, 1.5, YP + PLATE_T + 2.5, YP - CAM_FRONT - CAM_T - 4)
+
+
+# ================================ BUILD ====================================
+def build(doc_name="SwitchLifeRig"):
+    try:
+        App.closeDocument(doc_name)
+    except Exception:
+        pass
+    doc = App.newDocument(doc_name)
+    printed = doc.addObject("App::DocumentObjectGroup", "Printed")
+    refs = doc.addObject("App::DocumentObjectGroup", "Reference_not_printed")
+    parts = [
+        ("Base", make_base(), (0.85, 0.85, 0.88)),
+        ("Arm", make_arm(), (0.20, 0.45, 0.80)),
+        ("ServoPlate", make_servo_plate(), (0.25, 0.60, 0.90)),
+        ("Pinion20T", make_pinion(), (0.95, 0.55, 0.10)),
+        ("CamGear40T", make_cam_gear(), (0.90, 0.30, 0.15)),
+        ("Plunger", make_plunger(), (0.20, 0.70, 0.35)),
+        ("AxleSpacer", make_spacer(), (0.6, 0.6, 0.6)),
+        ("ClampBar_1", make_clamp(DUT_Y - 21, 1.6), (0.5, 0.5, 0.55)),
+        ("ClampBar_2", make_clamp(DUT_Y + 21, 1.6), (0.5, 0.5, 0.55)),
+    ]
+    rparts = [("SG51R_servo", ref_servo(), (0.3, 0.3, 0.9))]
+    for i, b in enumerate(ref_bearings()):
+        rparts.append(("Bearing623_%d" % (i + 1), b, (0.75, 0.75, 0.75)))
+    for i, b in enumerate(ref_breadboards()):
+        rparts.append(("MiniBreadboard_%d" % (i + 1), b, (0.97, 0.97, 0.95)))
+    rparts.append(("M3x35_axle", ref_bolts(), (0.4, 0.4, 0.4)))
+    rparts.append(("DUT_placeholder", ref_dut(), (0.1, 0.5, 0.2)))
+    for grp, lst in ((printed, parts), (refs, rparts)):
+        for name, shp, col in lst:
+            o = doc.addObject("Part::Feature", name)
+            o.Shape = shp
+            grp.addObject(o)
+            if App.GuiUp:
+                o.ViewObject.ShapeColor = col
+                if grp is refs:
+                    o.ViewObject.Transparency = 40
+    doc.recompute()
+    if App.GuiUp:
+        import FreeCADGui
+        FreeCADGui.ActiveDocument.ActiveView.viewIsometric()
+        FreeCADGui.SendMsgToActiveView("ViewFit")
+    return doc
+
+
+if not globals().get("_RIG_NO_BUILD"):
+    _doc = build()
+    App.Console.PrintMessage(
+        "Switch rig built. Plunger tip at rest: Z = %.1f mm above base (SADDLE_Z - 40)\n" % (SB - 40))

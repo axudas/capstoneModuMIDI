@@ -1,0 +1,14 @@
+# LibrePCB files must not have line endings converted (LibrePCB requirement)
+PCB/** -text
+*.lp   -text
+*.lpp  -text
+
+# Binary CAD / media
+*.stl   binary
+*.step  binary
+*.FCStd binary
+*.png   binary
+*.jpg   binary
+*.pdf   binary
+*.PcbDoc binary
+*.SchDoc binary

@@ -1,0 +1,12 @@
+(librepcb_library c3b3d0d3-60e7-43b0-9975-6d26bb01e07f
+ (name "Capstone Keyboard")
+ (description "Symbols, footprints and devices for the Capstone hall-effect keyboard: Adafruit Metro RP2350, NULLLAB 2.0in ST7789 display, EC11 encoder, Omron B3F-5050, PJ-102AH barrel jack, DRV5055 hall sensors and MX-style magnetic switch mounts.")
+ (keywords "keyboard,hall effect,magnetic,metro,rp2350,st7789,ec11,b3f")
+ (author "Capstone (generated with Claude)")
+ (version "0.1")
+ (created 2026-10-23T12:00:00Z)
+ (deprecated false)
+ (url "")
+ (dependency a9ddf0c6-9b1c-4730-b300-01b4f192ad40)
+ (manufacturer "")
+)

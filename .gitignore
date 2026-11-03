@@ -1,0 +1,20 @@
+# LibrePCB
+.autosave/
+.backup/
+user/
+*.user.lp
+.lock
+output/
+
+# FreeCAD
+*.FCBak
+*.FCStd1
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.tmp
+*.autosave
+__pycache__/

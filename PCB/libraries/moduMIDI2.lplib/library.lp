@@ -1,0 +1,11 @@
+(librepcb_library dab08bb2-9868-405c-bdda-ad5ef1d1fcee
+ (name "ModuMIDI2")
+ (description "compents for the modumidi 2 PCB's")
+ (keywords "")
+ (author "Aidan Carr")
+ (version "2")
+ (created 2026-10-23T12:25:12Z)
+ (deprecated false)
+ (url "")
+ (manufacturer "")
+)

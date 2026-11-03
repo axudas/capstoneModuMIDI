@@ -1,0 +1,13 @@
+(librepcb_device cd79e61c-3598-4557-8e48-abbd14e8f075
+ (name "MX-Style Magnetic Key Switch")
+ (description "Mounting footprint for MX-compatible magnetic switches (Gateron KS-20 etc.). Choose the footprint variant in the board editor.")
+ (keywords "mx,magnetic,hall,gateron,keyswitch")
+ (author "Capstone (generated with Claude)")
+ (version "0.1")
+ (created 2026-10-23T12:00:00Z)
+ (deprecated false)
+ (generated_by "")
+ (category 8ca4f9fb-3dd3-4c1e-a097-6601b437bbc6)
+ (component 28b6faef-ed7d-4a19-9f50-da00839d496b)
+ (package cf3d118e-5ee6-407d-9963-791490cc75d3)
+)
