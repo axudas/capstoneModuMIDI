@@ -1,14 +1,18 @@
-# LibrePCB
-.autosave/
-.backup/
-user/
-*.user.lp
-.lock
-output/
+# KiCad: backups, autosaves, local history, locks, caches, per-user view settings
+*-backups/
+.history/
+_autosave-*
+*.lck
+~*.lck
+fp-info-cache
+*.kicad_prl
 
-# FreeCAD
+# FreeCAD backups
 *.FCBak
 *.FCStd1
+
+# Python
+__pycache__/
 
 # OS / editors
 .DS_Store
@@ -17,4 +21,3 @@ Thumbs.db
 *.swp
 *.tmp
 *.autosave
-__pycache__/

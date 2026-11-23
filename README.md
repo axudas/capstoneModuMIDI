@@ -1,123 +1,90 @@
-# ModuMIDI 2 — Hall-Effect MIDI Keyboard (Capstone)
+# ModuMIDI 2: Hall-Effect MIDI Keyboard (Capstone)
 
-A modular MIDI keyboard that uses **magnetic (hall-effect) key switches** for analog, velocity-sensitive key sensing. It is driven by an **Adafruit Metro RP2350** and has an ST7789 display, a rotary encoder and buttons. This project builds on the original ModuMIDI (see `reference material/oldProject`).
+A modular MIDI keyboard that uses **magnetic (hall-effect) key switches** for analog, velocity-sensitive key sensing. The keyboard is built from identical 30-key **banks** that butt together flush, with the key pitch running straight across each seam. Each bank has its own RP2350 that reads its 30 sensors; a head unit (Adafruit Metro RP2350 with a 2.0" ST7789 display, encoder and buttons) collects the banks and sends USB-MIDI. This project builds on the original ModuMIDI (see `reference/original-modumidi`).
 
-> **Last updated:** 2026-11-17
-
----
+Portfolio page: [aidancarr.tech/modumidi.html](https://aidancarr.tech/modumidi.html)
 
 ## Repository layout
 
 ```
 capstone/
-├── README.md                     ← you are here
-├── PCB/
-│   ├── moduMidi/                 KiCad project (schematic + board)
-│   └── libraries/
-│       ├── Capstone_Keyboard.kicad_sym   custom KiCad symbols (8)
-│       ├── Capstone_Keyboard.pretty/     custom KiCad footprints (12)
-│       └── README.md
-├── mechanical/
-│   └── switch-test-rig/          FreeCAD switch-lifetime test rig (macro, FCStd, STEP, STLs)
-├── spacebar-prototype/           single hall-effect key test: KiCad board + RGB-lit 6.25u spacebar layer stack (STL)
-├── documentation/
-│   └── design-notes.md           key design decisions and numbers
-├── src/                          firmware (not started yet)
-└── reference material/
-    └── oldProject/               original ModuMIDI: Altium PCB, 3D-printed parts, photos
+├── README.md
+├── design-notes.md            key design decisions and numbers
+├── hardware/
+│   ├── bank-board/            KiCad bank board (one per bank, 30 sensors, RP2350)
+│   ├── bank-plate/            bank switch plate: laser-cut SVG, STEP, FreeCAD
+│   ├── key-prototype/         one-key test stacks for the 3u white / black / grey keys: KiCad board, 3D models
+│   ├── switch-test-rig/       FreeCAD switch-lifetime test rig (macro, FCStd, STEP, STLs)
+│   └── kicad-library/         Capstone_Keyboard KiCad symbols, footprints, 3D models
+├── firmware/                  firmware (bank firmware not started)
+└── reference/
+    └── original-modumidi/     original ModuMIDI: Altium PCB, 3D-printed parts, photos
 ```
 
 ## Status
 
 | Area | Status |
 |---|---|
-| Parts library (KiCad) | ✅ Done — 8 symbols, 12 footprints, needs a 1:1 paper-print fit check |
-| Schematic | 🟡 In progress — 33 hall sensors + barrel jack placed |
-| PCB layout | 🟡 Started — 175 × 125 mm board outline set |
-| Spacebar prototype (1 key, 6.25u, RGB) | 🟡 Started — all-THT KiCad PCB routed (DRC clean), layer stack STLs + cut files + renders, not built yet |
-| Switch test rig (CAD) | ✅ Designed — ready to print, servo dims need measuring |
-| Firmware | ⬜ Not started |
-| Enclosure / keys | ⬜ Not started (old ModuMIDI parts available for reference) |
+| Parts library (KiCad) | ✅ Done. Needs a 1:1 paper-print fit check |
+| Bank plate | ✅ Designed (SVG / STEP / FCStd), not cut yet |
+| Bank board: schematic | 🟡 Complete first pass, all wired: RP2350A + flash, 12 V → 5 V → 3.3 V power, 4 analog muxes, 30 key-link connectors (LED chain + key presence), RS-485 bus. Netlist checked; ERC in KiCad 10 still to run |
+| Bank board: layout | 🟡 Stepped bank outline, 6 mounting holes, all 214 parts placed (sensors, their capacitors and the key connectors on top; everything else on the bottom). Not routed |
+| Head unit | 🟡 Metro RP2350 + display on the bench (see the design notebook); no board yet |
+| Key prototype (1 key, 3u, RGB; white / black / grey) | 🟡 Shared board routed (DRC clean), models + cut files for all three keys, not built |
+| Switch test rig | ✅ Designed, ready to print (servo dimensions need measuring) |
+| Firmware | 🟡 Head-unit bring-up and 31-EDO MPE output tested (design notebook); bank firmware not started, nothing in `firmware/` yet |
+| Enclosure / keycaps | ⬜ Not started |
 
-## What's been done
+## What's in each part
 
-### 1. Custom KiCad parts library — `PCB/libraries/Capstone_Keyboard`
-KiCad symbol library (`.kicad_sym`) and footprint library (`.pretty`), converted from the original LibrePCB library on 2026-11-17. Both KiCad projects already point to it. It has symbols and footprints for:
+### Bank layout
+Each bank has 30 keys in three rows (white at the front, black in the middle, grey at the back), 10 columns at a **22.86 mm (0.900 in)** pitch, with 3u stabilizers whose wires run front to back (14 × 7 mm housings). The rows are 48.90 mm apart so the white-rear / black-front and black-rear / grey-front housings sit side by side without touching. Banks repeat every **228.60 mm (9.000 in)**. A straight seam would cut through a cut-out, so the side edges have one step: a tab on the left drops into a notch on the right of the next bank. Details are in [design-notes.md](design-notes.md).
 
-| Device | Footprint |
-|---|---|
-| Adafruit Metro RP2350 (shield headers) | Arduino Uno R3 headers + 4× M3 holes |
-| NULLLAB 2.0" ST7789 display | 1×6 2.54 mm header (G, V, SCL, SDA, DC, CS) |
-| EC11 rotary encoder with switch | Alps EC11E vertical |
-| Omron B3F-5050 tactile switch | B3F 12×12 + 2× boss holes |
-| CUI PJ-102AH barrel jack (for MEAN WELL GST60A12) | PJ-102AH THT |
-| Hall sensor SS49E / 49E (TO-92) | Lying flat under the key switch, upright wide, upright 1.27 mm |
-| Hall sensor TI DRV5055 (SOT-23) | SOT-23-3 |
-| MX-style magnetic key switch | "Center Post" / "No Center Post" variants |
-| Cherry stabilizer (PCB holes) | 3.05 + 4.0 mm NPTH pair, one per side |
+### Bank plate: `hardware/bank-plate`
+1.5 mm switch plate for one bank (240.03 × 180.34 mm) with the stepped tab and notch, 30 switch cut-outs, 60 stabilizer cut-outs and 8 M3 holes. See its [README](hardware/bank-plate/README.md).
 
-See the library's own [README](PCB/libraries/README.md) for pinouts and how to add it to other projects.
+### Bank board: `hardware/bank-board`
+One board per bank, shaped like the bank outline and trimmed front and back to the sensors and mounting holes (239.53 × 104.18 mm). 30 pick-and-place **DRV5055A4** hall sensors (SOT-23) sit under the switch centres and go through four analog muxes into the bank's own **RP2350A**. The board makes its own 5 V and 3.3 V from the 12 V on the inter-bank connector and talks to the head unit over RS-485. See its [README](hardware/bank-board/README.md) for every part and why it's there.
 
-### 2. Schematic started — `PCB/moduMidi`
-The KiCad project `moduMidi.kicad_pro` has the main schematic with 33 linear hall-effect sensors (U1–U33) and the DC barrel jack (J1) placed, plus the 175 × 125 mm board outline.
+### Parts library: `hardware/kicad-library`
+Custom KiCad symbols and footprints: RP2350A (QFN-60, from Raspberry Pi's reference design), hall sensors (SOT-23 and TO-92), magnetic MX switch, Cherry stabilizer holes, barrel jack, EC11 encoder, tactile switch, Metro RP2350 shield headers, ST7789 display header. Both KiCad projects already point to it. See its [README](hardware/kicad-library/README.md).
 
-### 3. Switch lifetime test rig — `mechanical/switch-test-rig`
-A 3D-printable rig for cycling a hall-effect switch prototype to measure its lifetime:
-- SG51R micro servo → 2:1 gear train → cosine cam → roller → guided plunger, so the switch is pressed straight down with no side load.
-- Adjustable height column with a scale, breadboard pockets for the electronics, and a clamp bed for the device under test.
-- Parametric FreeCAD macro, assembled `.FCStd`, `.step` and print-ready STLs. The full print list, hardware and assembly steps are in its [README](mechanical/switch-test-rig/README.md).
+### Key prototype: `hardware/key-prototype`
+Single-key test stacks for the three 3u bank keys (white, black, grey): one hand-solderable board shared by all three, foam, an acrylic plate with the bank plate's switch cut-out and Gateron low-profile stabilizer cut-outs (6.25u stabilizers, wire bent to 3u), a key with an LED pixel, and a magnetic diffuser topper with a top-detect pogo contact. See its [README](hardware/key-prototype/README.md).
 
-![Switch test rig](mechanical/switch-test-rig/img/iso.png)
+![Key prototype: white, black and grey key stacks exploded](hardware/key-prototype/img/exploded_all.png)
 
-### 4. Design decisions
-Sensor choice, ADC/mux plan, power and display wiring are written up in [documentation/design-notes.md](documentation/design-notes.md).
+### Switch lifetime test rig: `hardware/switch-test-rig`
+A 3D-printable rig that presses a switch straight down over and over to measure its lifetime: micro servo, 2:1 gears, cam, roller and guided plunger. See its [README](hardware/switch-test-rig/README.md).
 
-## Future work
+![Switch test rig](hardware/switch-test-rig/img/iso.png)
+
+## Next steps
 
 **Electronics**
-- [ ] Check the library footprints: print 1:1 and push the real parts through. Also check Metro D22/D23 against its silkscreen and the display cable colours.
-- [ ] Finish the schematic: add the Metro, CD74HC4067 analog muxes (the Metro has only 6 ADC pins), the display, encoder and buttons. Add a 100 nF capacitor on every sensor, and power the sensors from 3V3.
-- [ ] Pick the final hall sensor (SS49E TO-92 for hand assembly vs DRV5055A4 SOT-23).
-- [ ] Lay out the PCB (KiCad: Update PCB from Schematic), put each sensor under its switch's magnet, run ERC/DRC and order boards.
+- [ ] Fit-check the library footprints: print them 1:1 and push the real parts through.
+- [ ] Run ERC on the bank schematic in KiCad 10.
+- [ ] Choose the key-base wiring (flex or wires) and the blind-mate inter-bank header; both have placeholder footprints.
+- [ ] Route the bank board, run DRC and order boards.
+- [ ] Head-unit side of the bus: an RS-485 transceiver with fail-safe bias resistors.
+- [ ] Check that the inner stabilizer housings clear the board under the plate (cut-outs in the board, or enough plate-to-PCB height).
 
-**Firmware (`src/`)**
-- [ ] Read the ADC through the muxes and calibrate each key (rest / bottom-out).
+**Firmware (`firmware/`)**
+- [ ] Read the sensors through the muxes and calibrate each key (rest / bottom-out).
 - [ ] Turn key travel into MIDI note on/off with velocity (and optionally aftertouch).
-- [ ] USB-MIDI device, display UI, encoder menu.
-
-**Testing**
-- [ ] Measure the SG51R and update the `SV_*` parameters in the rig macro, then print and build the rig.
-- [ ] Write test-rig firmware (servo cycling + press counter + sensor logging) and run lifetime tests on the switch prototype.
+- [ ] MIDI output, display UI and encoder menu.
 
 **Mechanical**
-- [ ] Design the enclosure, key plates and keycaps (old ModuMIDI parts can be a starting point).
+- [ ] Cut a bank plate and test the switch fit and the tab/notch tiling.
+- [ ] Design the enclosure (it must follow the stepped plate profile) and the keycaps.
+- [ ] Build the key prototypes (white, black, grey), measure a real Gateron low-profile stabilizer, and test its 12.5 × 6 mm cut-out and bent wire. Then update the bank plate's stabilizer cut-outs to match.
+
+**Testing**
+- [ ] Measure the SG51R servo, update the rig macro, then print and build the test rig.
+- [ ] Write test-rig firmware (servo cycling, press counter, sensor logging) and run lifetime tests.
 
 ## Tools
 
-- [KiCad](https://www.kicad.org) 7 or newer — schematic, PCB and parts library (the files are KiCad 7 format; KiCad 8/9 open them and upgrade on save)
-- [FreeCAD](https://www.freecad.org) — test rig (run `SwitchLifeRig.FCMacro` to regenerate)
-
-### Working on the PCB from this repo
-1. In KiCad, open `PCB/moduMidi/moduMidi.kicad_pro` (or `spacebar-prototype/pcb/spacebarHall/spacebarHall.kicad_pro`).
-2. That's it. Each project's `sym-lib-table` / `fp-lib-table` already points to `PCB/libraries/Capstone_Keyboard`, and the other parts come from the standard KiCad libraries that ship with KiCad.
-
-The projects moved from LibrePCB to KiCad on 2026-11-17. The LibrePCB files are still in the git history if you ever need them.
-
----
-
-## Changelog
-
-| Date | Change |
-|---|---|
-| 2026-11-17 | Spacebar board v0.5: off-board connections moved to a 6-way 3.5 mm screw terminal (J1) on a 13 mm tab at the left end (board now 153 × 30 mm), R1 moved next to J2, all signals routed on top. J1 pinout changed: TOP_DET / 3V3 / HALL_OUT / GND / 5V / LED_DIN |
-| 2026-11-17 | **Switched from LibrePCB to KiCad**: `Capstone_Keyboard` library (8 symbols, 12 footprints), `moduMidi` project and the spacebar board (DRC clean, schematic and board match). LibrePCB files removed. |
-| 2026-11-17 | Spacebar prototype: whole-design exploded model now also breaks the key apart (LED, pogo, magnets, shim, topper) |
-| 2026-11-17 | Spacebar prototype: whole-key exploded model (`key_exploded.stl/.glb`) + renders |
-| 2026-11-17 | Spacebar prototype: whole-key assembled model (`key_assembled.stl/.glb`), assembled-stack GLB, assembled + section renders |
-| 2026-11-17 | Spacebar prototype v4: top-detect 2-pin pogo connector in the spacebar, shorted by a brass shim in the topper (J3 + 10k pull-up, TOP_DET on J1 pin 6) |
-| 2026-11-17 | Spacebar prototype v3: all-THT PCB (axial C1/R1, GND on bottom plane), LED = one WS2812B strip pixel, magnets in topper ends, thinner topper without ribs, key 0.75 in deep, proper 3D renders |
-| 2026-11-17 | Spacebar prototype v2: taller/steeper key, toothed key pattern along both edges, hollow diffuser topper, RGB LED in the key (J2 + 5V/DIN on J1), through-hole TO-92 hall sensor |
-| 2026-11-17 | Added `spacebar-prototype/`: one-key DRV5055 board (LibrePCB) and an exploded PCB / foam / acrylic / spacebar / keyed-topper stack (STL, GLB, DXF) |
-| 2026-11-03 | Portfolio page: [aidancarr.tech/modumidi.html](https://aidancarr.tech/modumidi.html) |
-| 2026-11-03 | Organized repo: added LibrePCB project + libraries, switch test rig, design notes and this README |
-| 2026-10-22 | Imported the original ModuMIDI project as reference material |
+- [KiCad](https://www.kicad.org) 10: schematics, boards and the parts library. Open `hardware/bank-board/moduMidi.kicad_pro` or `hardware/key-prototype/pcb/spacebarHall.kicad_pro`; the library tables are already set up.
+- [FreeCAD](https://www.freecad.org) 1.1: bank plate and test rig.
+- Python (manifold3d, trimesh, pyvista): key prototype models and renders.

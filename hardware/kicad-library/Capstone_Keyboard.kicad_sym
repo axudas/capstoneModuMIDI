@@ -1,0 +1,1087 @@
+(kicad_symbol_lib (version 20220914) (generator kicad_symbol_editor)
+  (symbol "Adafruit_Metro_RP2350" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "U" (at -12.7 22.86 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+    (property "Value" "Adafruit_Metro_RP2350" (at -12.7 -22.86 0) (effects (font (size 1.27 1.27)) (justify left top)))
+    (property "Footprint" "Capstone_Keyboard:Adafruit_Metro_RP2350_ShieldHeaders" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Datasheet" "https://www.adafruit.com/product/6267" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_keywords" "metro rp2350 adafruit shield" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "Shield-side header footprint for the Adafruit Metro RP2350 with PSRAM (#6267).\nMetro DC jack: 5.5/2.1 mm centre-positive, about 6-17 V (the MEAN WELL GST60A12 12 V supply plugs in directly).\nVerify the D22/D23 positions against the Metro silkscreen (they sit where an Uno has D12/D13).\nParts: 6267" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_fp_filters" "Adafruit_Metro*" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "Adafruit_Metro_RP2350_0_1"
+      (polyline (pts (xy -12.7 22.86) (xy 12.7 22.86) (xy 12.7 -22.86) (xy -12.7 -22.86) (xy -12.7 22.86)) (stroke (width 0.254) (type default)) (fill (type background)))
+    )
+    (symbol "Adafruit_Metro_RP2350_1_1"
+      (pin passive line (at -15.24 20.32 0) (length 2.54)
+        (name "VIN" (effects (font (size 1.27 1.27))))
+        (number "VIN" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 17.78 0) (length 2.54)
+        (name "5V" (effects (font (size 1.27 1.27))))
+        (number "5V" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 15.24 0) (length 2.54)
+        (name "3V3" (effects (font (size 1.27 1.27))))
+        (number "3V3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 12.7 0) (length 2.54)
+        (name "IOREF" (effects (font (size 1.27 1.27))))
+        (number "IOREF" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 10.16 0) (length 2.54)
+        (name "RESET" (effects (font (size 1.27 1.27))))
+        (number "RESET" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 7.62 0) (length 2.54)
+        (name "AREF" (effects (font (size 1.27 1.27))))
+        (number "AREF" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 2.54 0) (length 2.54)
+        (name "A0" (effects (font (size 1.27 1.27))))
+        (number "A0" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 0 0) (length 2.54)
+        (name "A1" (effects (font (size 1.27 1.27))))
+        (number "A1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 -2.54 0) (length 2.54)
+        (name "A2" (effects (font (size 1.27 1.27))))
+        (number "A2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 -5.08 0) (length 2.54)
+        (name "A3" (effects (font (size 1.27 1.27))))
+        (number "A3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 -7.62 0) (length 2.54)
+        (name "A4" (effects (font (size 1.27 1.27))))
+        (number "A4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 -10.16 0) (length 2.54)
+        (name "A5" (effects (font (size 1.27 1.27))))
+        (number "A5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 -20.32 0) (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "GND1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 -20.32 0) (length 2.54) hide
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "GND3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -15.24 -20.32 0) (length 2.54) hide
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "GND2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 20.32 180) (length 2.54)
+        (name "D0" (effects (font (size 1.27 1.27))))
+        (number "D0" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 17.78 180) (length 2.54)
+        (name "D1" (effects (font (size 1.27 1.27))))
+        (number "D1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 15.24 180) (length 2.54)
+        (name "D2" (effects (font (size 1.27 1.27))))
+        (number "D2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 12.7 180) (length 2.54)
+        (name "D3" (effects (font (size 1.27 1.27))))
+        (number "D3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 10.16 180) (length 2.54)
+        (name "D4" (effects (font (size 1.27 1.27))))
+        (number "D4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 7.62 180) (length 2.54)
+        (name "D5" (effects (font (size 1.27 1.27))))
+        (number "D5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 5.08 180) (length 2.54)
+        (name "D6" (effects (font (size 1.27 1.27))))
+        (number "D6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 2.54 180) (length 2.54)
+        (name "D7" (effects (font (size 1.27 1.27))))
+        (number "D7" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 0 180) (length 2.54)
+        (name "D8" (effects (font (size 1.27 1.27))))
+        (number "D8" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 -2.54 180) (length 2.54)
+        (name "D9" (effects (font (size 1.27 1.27))))
+        (number "D9" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 -5.08 180) (length 2.54)
+        (name "D10" (effects (font (size 1.27 1.27))))
+        (number "D10" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 -7.62 180) (length 2.54)
+        (name "D11" (effects (font (size 1.27 1.27))))
+        (number "D11" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 -10.16 180) (length 2.54)
+        (name "D22" (effects (font (size 1.27 1.27))))
+        (number "D22" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 -12.7 180) (length 2.54)
+        (name "D23" (effects (font (size 1.27 1.27))))
+        (number "D23" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 -17.78 180) (length 2.54)
+        (name "SDA" (effects (font (size 1.27 1.27))))
+        (number "SDA" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 15.24 -20.32 180) (length 2.54)
+        (name "SCL" (effects (font (size 1.27 1.27))))
+        (number "SCL" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "CUI_PJ-102AH" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "J" (at -7.62 5.08 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+    (property "Value" "CUI_PJ-102AH" (at -7.62 -5.08 0) (effects (font (size 1.27 1.27)) (justify left top)))
+    (property "Footprint" "Capstone_Keyboard:CUI_PJ-102AH" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Datasheet" "https://www.amazon.com/dp/B013EU0AQQ" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_keywords" "dc barrel jack pj-102ah mean well gst60a12" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "PCB jack that mates with the MEAN WELL GST60A12-P1J 12 V / 5 A adapter (5.5 x 2.1 mm plug, centre positive). PJ-102AH is rated 2.5 A - fine for a keyboard/display load; if you ever need the full 5 A use a higher-current jack. Not needed at all if the adapter plugs straight into the Metro RP2350 DC jack.\nParts: PJ-102AH" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_fp_filters" "CUI_PJ-102AH*" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "CUI_PJ-102AH_0_1"
+      (polyline (pts (xy -7.62 5.08) (xy 7.62 5.08) (xy 7.62 -5.08) (xy -7.62 -5.08) (xy -7.62 5.08)) (stroke (width 0.254) (type default)) (fill (type background)))
+      (polyline (pts (xy -6.35 3.81) (xy -3.81 3.81) (xy -3.81 1.27) (xy -6.35 1.27) (xy -6.35 3.81)) (stroke (width 0.2) (type default)) (fill (type outline)))
+    )
+    (symbol "CUI_PJ-102AH_1_1"
+      (pin passive line (at 10.16 2.54 180) (length 2.54)
+        (name "PIN" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 10.16 0 180) (length 2.54)
+        (name "SW" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 10.16 -2.54 180) (length 2.54)
+        (name "SLEEVE" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "EC11_Encoder_Switch" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "SW" (at -5.08 5.08 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+    (property "Value" "EC11_Encoder_Switch" (at -5.08 -5.08 0) (effects (font (size 1.27 1.27)) (justify left top)))
+    (property "Footprint" "Capstone_Keyboard:EC11_Encoder_Switch_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Datasheet" "https://www.amazon.com/dp/B0C6Q67V97" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_keywords" "ec11 encoder rotary switch wwzmdib" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "Generic EC11 20-detent rotary encoder with push button, 5 pins + 2 mounting lugs (WWZMDiB 6-pack, Amazon B0C6Q67V97). Footprint matches Alps EC11E vertical. Mounting lugs MP1/MP2 are left unconnected (tie to GND in the board editor if you like)." (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_fp_filters" "EC11*" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "EC11_Encoder_Switch_0_1"
+      (polyline (pts (xy -5.08 5.08) (xy 5.08 5.08) (xy 5.08 -5.08) (xy -5.08 -5.08) (xy -5.08 5.08)) (stroke (width 0.2) (type default)) (fill (type background)))
+      (polyline (pts (xy 0 1.15) (xy 0 -1.15)) (stroke (width 0.4) (type default)) (fill (type none)))
+      (polyline (pts (xy 3.81 2.54) (xy 3.81 1.27) (xy 4.445 -1.27)) (stroke (width 0.16) (type default)) (fill (type none)))
+      (polyline (pts (xy 3.81 -1.27) (xy 3.81 -2.54)) (stroke (width 0.16) (type default)) (fill (type none)))
+      (circle (center 0 0) (radius 1.27) (stroke (width 0.2) (type default)) (fill (type none)))
+    )
+    (symbol "EC11_Encoder_Switch_1_1"
+      (pin passive line (at -7.62 2.54 0) (length 2.54)
+        (name "A" (effects (font (size 1.27 1.27))))
+        (number "A" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -7.62 0 0) (length 2.54)
+        (name "C" (effects (font (size 1.27 1.27))))
+        (number "C" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -7.62 -2.54 0) (length 2.54)
+        (name "B" (effects (font (size 1.27 1.27))))
+        (number "B" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 7.62 2.54 180) (length 3.82)
+        (name "S1" (effects (font (size 1.27 1.27))))
+        (number "S1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 7.62 -2.54 180) (length 3.82)
+        (name "S2" (effects (font (size 1.27 1.27))))
+        (number "S2" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "Hall_DRV5055_SOT-23" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "U" (at -7.62 5.08 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+    (property "Value" "Hall_DRV5055_SOT-23" (at -7.62 -5.08 0) (effects (font (size 1.27 1.27)) (justify left top)))
+    (property "Footprint" "Capstone_Keyboard:Hall_SOT-23-3" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/drv5055.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_keywords" "hall effect hall-effect drv5055 hall ti sot23 smd keyboard magnetic" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "TI DRV5055 ratiometric linear bipolar hall sensor, SOT-23 (DBZ). Pinout 1=VCC, 2=OUT, 3=GND.\nRecommended for Gateron KS-20 style magnetic switches (~10 mT at rest, ~90 mT bottomed out): DRV5055A4 (+/-169 mT range, never saturates) or DRV5055A3 (+/-85 mT, more resolution but may clip at bottom-out). Bipolar, so it works whichever magnet pole faces the PCB.\nParts: DRV5055A4QDBZR, DRV5055A3QDBZR, DRV5055A2QDBZR, DRV5055A1QDBZR" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_fp_filters" "Hall_SOT-23*" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "Hall_DRV5055_SOT-23_0_1"
+      (polyline (pts (xy -7.62 5.08) (xy 7.62 5.08) (xy 7.62 -5.08) (xy -7.62 -5.08) (xy -7.62 5.08)) (stroke (width 0.254) (type default)) (fill (type background)))
+      (polyline (pts (xy -1.27 1.27) (xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 -1.27) (xy -1.27 1.27)) (stroke (width 0.2) (type default)) (fill (type none)))
+      (polyline (pts (xy 0 1.27) (xy 0 -1.27)) (stroke (width 0.2) (type default)) (fill (type none)))
+    )
+    (symbol "Hall_DRV5055_SOT-23_1_1"
+      (pin passive line (at -10.16 2.54 0) (length 2.54)
+        (name "VCC" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -10.16 -2.54 0) (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 10.16 0 180) (length 2.54)
+        (name "OUT" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "Hall_SS49E_TO-92" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "U" (at -7.62 5.08 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+    (property "Value" "Hall_SS49E_TO-92" (at -7.62 -5.08 0) (effects (font (size 1.27 1.27)) (justify left top)))
+    (property "Footprint" "Capstone_Keyboard:Hall_TO-92_LyingFlat" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/drv5055.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_keywords" "hall effect hall-effect ss49e 49e oh49e drv5055 ss495a hall to92 tht through hole magnetic keyboard" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "Through-hole linear hall effect sensor: Honeywell SS49E, generic 49E / OH49E (the common hobby packs), or TI DRV5055 in TO-92 (LPG). Pinout 1=VCC, 2=GND, 3=OUT, looking at the branded face.\nUnder a magnetic key switch use the \"Lying Flat\" footprint: bend the leads 90 deg about 1.5 mm below the body and lay it on the PCB branded face UP, centred under the magnet.\nSupply 3.3 V (49E clones: check the datasheet minimum, usually 2.7-3.0 V).\nParts: SS49E, DRV5055A4QLPG, DRV5055A3QLPG" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_fp_filters" "Hall_TO-92*" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "Hall_SS49E_TO-92_0_1"
+      (polyline (pts (xy -7.62 5.08) (xy 7.62 5.08) (xy 7.62 -5.08) (xy -7.62 -5.08) (xy -7.62 5.08)) (stroke (width 0.254) (type default)) (fill (type background)))
+      (polyline (pts (xy -1.27 1.27) (xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 -1.27) (xy -1.27 1.27)) (stroke (width 0.2) (type default)) (fill (type none)))
+      (polyline (pts (xy 0 1.27) (xy 0 -1.27)) (stroke (width 0.2) (type default)) (fill (type none)))
+    )
+    (symbol "Hall_SS49E_TO-92_1_1"
+      (pin passive line (at -10.16 2.54 0) (length 2.54)
+        (name "VCC" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -10.16 -2.54 0) (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 10.16 0 180) (length 2.54)
+        (name "OUT" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "MX_Magnetic_Switch" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "K" (at -3.81 3.81 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+    (property "Value" "MX_Magnetic_Switch" (at -3.81 -3.81 0) (effects (font (size 1.27 1.27)) (justify left top)))
+    (property "Footprint" "Capstone_Keyboard:MX_Magnetic_NoCenterPost" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_keywords" "mx magnetic hall gateron keyswitch" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "Mounting footprint for MX-compatible magnetic switches (Gateron KS-20 etc.). Choose the footprint variant in the board editor." (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_fp_filters" "MX_Magnetic*" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "MX_Magnetic_Switch_0_1"
+      (polyline (pts (xy -3.81 3.81) (xy 3.81 3.81) (xy 3.81 -3.81) (xy -3.81 -3.81) (xy -3.81 3.81)) (stroke (width 0.254) (type default)) (fill (type background)))
+      (polyline (pts (xy -1.27 1.27) (xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 -1.27) (xy -1.27 1.27)) (stroke (width 0.2) (type default)) (fill (type outline)))
+    )
+    (symbol "MX_Magnetic_Switch_1_1"
+    )
+  )
+  (symbol "Omron_B3F-5050" (pin_names hide) (in_bom yes) (on_board yes)
+    (property "Reference" "S" (at 0 5.08 0) (effects (font (size 1.27 1.27)) (justify bottom)))
+    (property "Value" "Omron_B3F-5050" (at 0 -1.27 0) (effects (font (size 1.27 1.27)) (justify top)))
+    (property "Footprint" "Capstone_Keyboard:Omron_B3F-5050_12x12mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Datasheet" "https://www.digikey.com/en/products/detail/aratas-formerly-omron-components/B3F-5050/368377" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_keywords" "omron aratas b3f b3f-5050 tactile switch 12mm b32-1260" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "Omron (Aratas) B3F-5050 12 x 12 mm THT tactile switch with projected plunger. Fits the B32-1260 white square slip-on cap (cap is mechanical only - no footprint needed).\nParts: B3F-5050" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_fp_filters" "Omron_B3F*" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "Omron_B3F-5050_0_1"
+      (polyline (pts (xy -3.175 2.54) (xy 3.175 2.54)) (stroke (width 0.508) (type default)) (fill (type none)))
+      (polyline (pts (xy 0 2.54) (xy 0 5.08)) (stroke (width 0.508) (type default)) (fill (type none)))
+      (polyline (pts (xy -3.81 5.08) (xy 3.81 5.08) (xy 3.81 -1.27) (xy -3.81 -1.27) (xy -3.81 5.08)) (stroke (width 0.254) (type default)) (fill (type background)))
+      (circle (center -2.54 0) (radius 0.635) (stroke (width 0.254) (type default)) (fill (type none)))
+      (circle (center 2.54 0) (radius 0.635) (stroke (width 0.254) (type default)) (fill (type none)))
+    )
+    (symbol "Omron_B3F-5050_1_1"
+      (pin passive line (at -5.08 0 0) (length 1.905)
+        (name "1" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -5.08 0 0) (length 1.905) hide
+        (name "1" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 5.08 0 180) (length 1.905)
+        (name "2" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 5.08 0 180) (length 1.905) hide
+        (name "2" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "ST7789_Display_1x06" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "DS" (at -7.62 7.62 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+    (property "Value" "ST7789_Display_1x06" (at -7.62 -10.16 0) (effects (font (size 1.27 1.27)) (justify left top)))
+    (property "Footprint" "Capstone_Keyboard:PinHeader_1x06_P2.54mm_ST7789" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Datasheet" "https://www.amazon.com/dp/B0H2Y83TYG" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_keywords" "display st7789 nulllab 2.0 240x320" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_description" "NULLLAB 2.0\" 240x320 IPS display (ST7789, SWIFT-LCD-20), connected with the supplied GH1.25-to-Dupont 6-pin cable to a 1x6 2.54 mm header.\nHeader pin order: 1=G, 2=V, 3=SCL, 4=SDA, 5=DC, 6=CS (matches the module order). Module size 56 x 40 mm. Check the cable colours against the module silkscreen before powering up." (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (property "ki_fp_filters" "PinHeader_1x06*" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+    (symbol "ST7789_Display_1x06_0_1"
+      (polyline (pts (xy -7.62 7.62) (xy 7.62 7.62) (xy 7.62 -10.16) (xy -7.62 -10.16) (xy -7.62 7.62)) (stroke (width 0.254) (type default)) (fill (type background)))
+      (polyline (pts (xy 1.27 3.81) (xy 6.35 3.81) (xy 6.35 -6.35) (xy 1.27 -6.35) (xy 1.27 3.81)) (stroke (width 0.2) (type default)) (fill (type none)))
+    )
+    (symbol "ST7789_Display_1x06_1_1"
+      (pin passive line (at -10.16 5.08 0) (length 2.54)
+        (name "VCC" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -10.16 2.54 0) (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -10.16 0 0) (length 2.54)
+        (name "SCL" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -10.16 -2.54 0) (length 2.54)
+        (name "SDA" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -10.16 -5.08 0) (length 2.54)
+        (name "DC" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at -10.16 -7.62 0) (length 2.54)
+        (name "CS" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+  (symbol "RP2350A_QFN-60"
+    (pin_names
+      (offset 1.016))
+    (in_bom yes)
+    (on_board yes)
+    (property "Reference" "U"
+      (at -29.21 49.53 0)
+      (effects
+        (font
+          (size 1.27 1.27))))
+    (property "Value" "RP2350A"
+      (at 24.13 -49.53 0)
+      (effects
+        (font
+          (size 1.27 1.27))))
+    (property "Footprint" "Capstone_Keyboard:RP2350-QFN-60-1EP_7x7_P0.4mm_EP3.4x3.4mm_ThermalVias"
+      (at -19.05 0 0)
+      (effects
+        (font
+          (size 1.27 1.27))
+        hide))
+    (property "Datasheet" "https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf"
+      (at -19.05 0 0)
+      (effects
+        (font
+          (size 1.27 1.27))
+        hide))
+    (property "ki_description" "Raspberry Pi RP2350A microcontroller, dual Cortex-M33 / Hazard3, 150 MHz, 520 KB SRAM, QFN-60 7x7 mm, 30 GPIO, 4 ADC inputs (GPIO26-29). Needs external QSPI flash, 12 MHz crystal and the core-regulator inductor; see Raspberry Pi \"Hardware design with RP2350\". Symbol and footprint from Raspberry Pi's RP2350A minimal design (RP-006440)."
+      (at 0 0 0)
+      (effects
+        (font
+          (size 1.27 1.27))
+        hide))
+    (property "ki_keywords" "RP2350 RP2350A raspberry pi microcontroller MCU QFN-60"
+      (at 0 0 0)
+      (effects
+        (font
+          (size 1.27 1.27))
+        hide))
+    (property "ki_fp_filters" "RP2350*QFN*60*"
+      (at 0 0 0)
+      (effects
+        (font
+          (size 1.27 1.27))
+        hide))
+    (symbol "RP2350A_QFN-60_0_0"
+      (text "Raspberry Pi"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 2.54 2.54)))))
+    (symbol "RP2350A_QFN-60_0_1"
+      (rectangle
+        (start 29.21 48.26)
+        (end -29.21 -48.26)
+        (stroke
+          (width 0.254)
+          (type default))
+        (fill
+          (type background))))
+    (symbol "RP2350A_QFN-60_1_0"
+      (text "RP2350A QFN-60"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 2.54 2.54)))))
+    (symbol "RP2350A_QFN-60_1_1"
+      (pin power_in line
+        (at 8.89 50.8 270)
+        (length 2.54)
+        (name "IOVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "1"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 15.24 180)
+        (length 2.54)
+        (name "GPIO7"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "10"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at 6.35 50.8 270)
+        (length 2.54)
+        (name "IOVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "11"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 12.7 180)
+        (length 2.54)
+        (name "GPIO8"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "12"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 10.16 180)
+        (length 2.54)
+        (name "GPIO9"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "13"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 7.62 180)
+        (length 2.54)
+        (name "GPIO10"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "14"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 5.08 180)
+        (length 2.54)
+        (name "GPIO11"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "15"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 2.54 180)
+        (length 2.54)
+        (name "GPIO12"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "16"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 0 180)
+        (length 2.54)
+        (name "GPIO13"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "17"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -2.54 180)
+        (length 2.54)
+        (name "GPIO14"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "18"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -5.08 180)
+        (length 2.54)
+        (name "GPIO15"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "19"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 33.02 180)
+        (length 2.54)
+        (name "GPIO0"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "2"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at 3.81 50.8 270)
+        (length 2.54)
+        (name "IOVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "20"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin input line
+        (at -31.75 -2.54 0)
+        (length 2.54)
+        (name "XIN"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "21"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin passive line
+        (at -31.75 -7.62 0)
+        (length 2.54)
+        (name "XOUT"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "22"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -20.32 50.8 270)
+        (length 2.54)
+        (name "DVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "23"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin output line
+        (at -31.75 -31.75 0)
+        (length 2.54)
+        (name "SWCLK"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "24"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at -31.75 -34.29 0)
+        (length 2.54)
+        (name "SWD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "25"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin input line
+        (at -31.75 -20.32 0)
+        (length 2.54)
+        (name "RUN"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "26"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -7.62 180)
+        (length 2.54)
+        (name "GPIO16"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "27"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -10.16 180)
+        (length 2.54)
+        (name "GPIO17"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "28"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -12.7 180)
+        (length 2.54)
+        (name "GPIO18"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "29"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 30.48 180)
+        (length 2.54)
+        (name "GPIO1"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "3"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at 1.27 50.8 270)
+        (length 2.54)
+        (name "IOVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "30"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -15.24 180)
+        (length 2.54)
+        (name "GPIO19"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "31"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -17.78 180)
+        (length 2.54)
+        (name "GPIO20"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "32"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -20.32 180)
+        (length 2.54)
+        (name "GPIO21"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "33"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -22.86 180)
+        (length 2.54)
+        (name "GPIO22"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "34"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -25.4 180)
+        (length 2.54)
+        (name "GPIO23"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "35"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -27.94 180)
+        (length 2.54)
+        (name "GPIO24"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "36"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -30.48 180)
+        (length 2.54)
+        (name "GPIO25"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "37"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -1.27 50.8 270)
+        (length 2.54)
+        (name "IOVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "38"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -22.86 50.8 270)
+        (length 2.54)
+        (name "DVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "39"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 27.94 180)
+        (length 2.54)
+        (name "GPIO2"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "4"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -35.56 180)
+        (length 2.54)
+        (name "GPIO26_ADC0"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "40"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -38.1 180)
+        (length 2.54)
+        (name "GPIO27_ADC1"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "41"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -40.64 180)
+        (length 2.54)
+        (name "GPIO28_ADC2"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "42"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 -43.18 180)
+        (length 2.54)
+        (name "GPIO29_ADC3"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "43"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at 16.51 50.8 270)
+        (length 2.54)
+        (name "ADC_AVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "44"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -3.81 50.8 270)
+        (length 2.54)
+        (name "IOVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "45"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -31.75 39.37 0)
+        (length 2.54)
+        (name "VREG_AVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "46"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -31.75 29.21 0)
+        (length 2.54)
+        (name "VREG_PGND"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "47"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_out line
+        (at -31.75 31.75 0)
+        (length 2.54)
+        (name "VREG_LX"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "48"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -31.75 36.83 0)
+        (length 2.54)
+        (name "VREG_VIN"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "49"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 25.4 180)
+        (length 2.54)
+        (name "GPIO3"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "5"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin input line
+        (at -31.75 34.29 0)
+        (length 2.54)
+        (name "VREG_FB"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "50"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 40.64 180)
+        (length 2.54)
+        (name "USB_DM"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "51"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 43.18 180)
+        (length 2.54)
+        (name "USB_DP"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "52"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at 12.7 50.8 270)
+        (length 2.54)
+        (name "USB_OTP_VDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "53"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -10.16 50.8 270)
+        (length 2.54)
+        (name "QSPI_IOVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "54"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at -31.75 10.16 0)
+        (length 2.54)
+        (name "QSPI_SD3"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "55"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin output line
+        (at -31.75 6.35 0)
+        (length 2.54)
+        (name "QSPI_SCLK"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "56"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at -31.75 17.78 0)
+        (length 2.54)
+        (name "QSPI_SD0"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "57"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at -31.75 12.7 0)
+        (length 2.54)
+        (name "QSPI_SD2"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "58"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at -31.75 15.24 0)
+        (length 2.54)
+        (name "QSPI_SD1"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "59"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at -17.78 50.8 270)
+        (length 2.54)
+        (name "DVDD"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "6"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at -31.75 21.59 0)
+        (length 2.54)
+        (name "QSPI_SS"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "60"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin power_in line
+        (at 0 -50.8 90)
+        (length 2.54)
+        (name "GND"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "61"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 22.86 180)
+        (length 2.54)
+        (name "GPIO4"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "7"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 20.32 180)
+        (length 2.54)
+        (name "GPIO5"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "8"
+          (effects
+            (font
+              (size 1.27 1.27)))))
+      (pin bidirectional line
+        (at 31.75 17.78 180)
+        (length 2.54)
+        (name "GPIO6"
+          (effects
+            (font
+              (size 1.27 1.27))))
+        (number "9"
+          (effects
+            (font
+              (size 1.27 1.27)))))))
+)
